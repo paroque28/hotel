@@ -9,6 +9,7 @@ const config = {
   projectId: process.env.REACT_APP_PROJECT_ID,
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
 
 class Firebase {
@@ -28,8 +29,6 @@ class Firebase {
     /* Social Sign In Method Provider */
 
     this.googleProvider = new app.auth.GoogleAuthProvider();
-    this.facebookProvider = new app.auth.FacebookAuthProvider();
-    this.twitterProvider = new app.auth.TwitterAuthProvider();
   }
 
   // *** Auth API ***
@@ -42,12 +41,6 @@ class Firebase {
 
   doSignInWithGoogle = () =>
     this.auth.signInWithPopup(this.googleProvider);
-
-  doSignInWithFacebook = () =>
-    this.auth.signInWithPopup(this.facebookProvider);
-
-  doSignInWithTwitter = () =>
-    this.auth.signInWithPopup(this.twitterProvider);
 
   doSignOut = () => this.auth.signOut();
 
@@ -70,7 +63,6 @@ class Firebase {
           .once('value')
           .then(snapshot => {
             const dbUser = snapshot.val();
-
             // default empty roles
             if (!dbUser.roles) {
               dbUser.roles = {};
