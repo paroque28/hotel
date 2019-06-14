@@ -1,7 +1,8 @@
 import app from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
-import flamelink from 'flamelink' 
+// eslint-disable-next-line
+import * as firebase from 'firebase' 
+
+import flamelink from 'flamelink'
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -17,14 +18,15 @@ class Firebase {
   constructor() {
     const firebaseApp = app.initializeApp(config);
     this.app = firebaseApp;
+
+    /* Flamelink */
+
     this.flamelink = flamelink({
-      firebaseApp, // required
+      firebaseApp,
       dbType: 'cf', // can be either 'rtdb' or 'cf' for Realtime DB or Cloud Firestore
-      locale: 'en-US', // optional, default shown
-      precache: true // optional, default shown. Currently it only precaches "schemas" for better performance
+      locale: 'en-US',
+      precache: true
     })
-    console.log("Hi")
-    console.log(this.flamelink)
 
     /* Helper */
 
@@ -105,6 +107,26 @@ class Firebase {
   message = uid => this.db.ref(`messages/${uid}`);
 
   messages = () => this.db.ref('messages');
+
+
+  // *** Rooms API ***
+  rooms = () => this.flamelink.content.get({ schemaKey: 'room' });
+
+  // *** Services API ***
+  services = () => this.flamelink.content.get({ schemaKey: 'service' });
+
+  // *** Hotel API ***
+
+  hotel = () => this.flamelink.content.get({ schemaKey: 'hotel', populate: [{
+    field: 'images'}]});
+
+  // *** Titles API ***
+
+  titles = () => this.flamelink.content.get({ schemaKey: 'titles' });
+
+  // *** Images API ***
+
+  getURL = (id) => this.flamelink.storage.getURL(id)
 }
 
 export default Firebase;

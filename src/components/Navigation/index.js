@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
 import { AuthUserContext } from '../Session';
 import SignOutButton from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 import * as ROLES from '../../constants/roles';
 
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import NavLink from 'react-bootstrap/NavLink'
 const Navigation = () => (
   <AuthUserContext.Consumer>
     {authUser =>
@@ -19,36 +20,30 @@ const Navigation = () => (
 );
 
 const NavigationAuth = ({ authUser }) => (
-  <ul>
-    <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.HOME}>Home</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.ACCOUNT}>Account</Link>
-    </li>
-    {!!authUser.roles[ROLES.ADMIN] && (
-      <li>
-        <Link to={ROUTES.ADMIN}>Admin</Link>
-      </li>
+  <Navbar bg="primary" variant="dark">
+    <Navbar.Brand href={ROUTES.LANDING}>iHotel</Navbar.Brand>
+    <Nav className="mr-auto">
+      <NavLink href={ROUTES.HOME}>Home</NavLink>
+      <NavLink href={ROUTES.ACCOUNT}>Account</NavLink>
+      {!!authUser.roles[ROLES.ADMIN] && (
+        <NavLink href={ROUTES.ADMIN}>Admin</NavLink>
     )}
-    <li>
+    </Nav>
+    <Nav className="navbar-right">
       <SignOutButton />
-    </li>
-  </ul>
+    </Nav>
+  </Navbar>
 );
 
 const NavigationNonAuth = () => (
-  <ul>
-    <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-    </li>
-  </ul>
+  <Navbar bg="primary" variant="dark">
+    <Navbar.Brand href={ROUTES.LANDING}>iHotel</Navbar.Brand>
+    <Nav className="mr-auto">
+    </Nav>
+    <Nav className="navbar-right">
+      <NavLink href={ROUTES.SIGN_IN}> Sign In </NavLink>
+    </Nav>
+  </Navbar>
 );
 
 export default Navigation;

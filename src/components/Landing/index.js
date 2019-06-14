@@ -1,93 +1,163 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
-import Button from 'react-bootstrap/Button';
 
 import { withFirebase } from '../Firebase';
-import * as ROUTES from '../../constants/routes';
+//import * as ROUTES from '../../constants/routes';
+import Carousel from 'react-bootstrap/Carousel'
+import Card from 'react-bootstrap/Card'
+import Accordion from 'react-bootstrap/Accordion'
+import Button from 'react-bootstrap/Button'
+
+import ReactWeather from 'react-open-weather';
+import 'react-open-weather/lib/css/ReactWeather.css';
 
 const Landing = () => (
   <div className="card">
-      <h4 className="card-title mb-4 mt-1">Landing</h4>
-      <LandingForm 
-       />
+      <HotelDescription/>
+      <HotelCarousel/>
+      <hr>
+      </hr>
+      <ReactWeather
+        forecast="5days"
+        apikey="847d26c7fd2b47d691d234017191406"
+        type="city"
+        city="Sardinal"/>
   </div>
 );
 
 const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: null,
+  titles: {},
+  hotel: {},
+  services: {},
+  hotelImages: [],
+  rooms: {}
 };
 
-class LandingFormBase extends Component {
+class HotelDescriptionBase extends Component {
   constructor(props) {
     super(props);
 
     this.state = { ...INITIAL_STATE };
+    this.props.firebase.hotel().then((obj) => {
+      this.setState({"hotel": obj[Object.keys(obj)[0]]});
+    });
+    this.props.firebase.rooms().then((obj) => {
+      this.setState({"rooms": obj});
+    });
+    this.props.firebase.services().then((obj) => {
+      this.setState({"services": obj});
+      console.log(obj)
+    });
+    this.props.firebase.titles().then((obj) => {
+      this.setState({"titles": obj[Object.keys(obj)[0]]});
+    });
   }
 
-  onSubmit = event => {
-    const { email, password } = this.state;
-    this.props.firebase
-      .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
-    event.preventDefault();
-  };
+ 
 
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
   render() {
-    const { email, password, error } = this.state;
-
-    const isInvalid = password === '' || email === '';
-
-    // const products = this.props.flamelink.flamelink.content.get({ schemaKey: 'products' })
-    // console.log('All of your products:', products)
-
+    const servicesList = this.state.services;
+    const services = Object.keys(this.state.services).map(function(key) {
+      return(<Card>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                 {servicesList[key].name}
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey="0">
+                <Card.Body>{servicesList[key].description}
+                <p>
+                {servicesList[key].phoneNumber}
+                </p>
+                </Card.Body>
+                
+              </Accordion.Collapse>
+            
+            </Card>
+      );
+    });
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          className="form-control"
-          placeholder="Email Address"
-        />
-        <input
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          className="form-control"
-          placeholder="Password"
-        />
-        <Button disabled={isInvalid} type="submit" className="float-right btn btn-outline-primary">
-          Sign In
-        </Button>
-
-        {error && <p>{error.message}</p>}
-      </form>
-    );
+      <div className="container">
+        <h1 className="display-4 ">{this.state.hotel.name}</h1>
+        <p className="lead">{this.state.hotel.description}</p>
+        <div className="container">
+          
+          <h4 className="">{this.state.titles.services}</h4>
+          <Accordion>
+            {services}
+          </Accordion>
+        </div>
+      </div>
+        );
   }
 }
 
-const LandingForm 
+
+
+
+class HotelCarouselBase extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { ...INITIAL_STATE };
+    this.props.firebase.hotel().then((obj) => {
+      for (var image of obj[Object.keys(obj)[0]].images){
+        this.props.firebase.getURL({ fileId: image.image[0].id }).then((url) => {
+          this.setState({"hotelImages":[url, ...this.state.hotelImages]})
+        });
+      }
+      
+    });
+    this.props.firebase.titles().then((obj) => {
+      this.setState({"titles": obj[Object.keys(obj)[0]]});
+    });
+  }
+
+ 
+
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  render() {
+    var images = this.state.hotelImages.map(function(item) {
+			return (
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src={item}
+            alt="Hotel"
+          />
+        </Carousel.Item>
+			);
+    });
+    return (
+      
+      <div>
+      <h3 className="">{this.state.titles.gallery}</h3>
+      <Carousel>
+        {images}
+      </Carousel></div>
+        );
+  }
+}
+
+const HotelCarousel 
+ = compose(
+  withFirebase,
+)(HotelCarouselBase);
+
+const HotelDescription 
  = compose(
   withRouter,
   withFirebase,
-)(LandingFormBase);
-
+)(HotelDescriptionBase);
 
 export default Landing;
 
-export { LandingForm };
+export { HotelDescription };
