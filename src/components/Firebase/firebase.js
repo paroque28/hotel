@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import flamelink from 'flamelink' 
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -14,7 +15,16 @@ const config = {
 
 class Firebase {
   constructor() {
-    app.initializeApp(config);
+    const firebaseApp = app.initializeApp(config);
+    this.app = firebaseApp;
+    this.flamelink = flamelink({
+      firebaseApp, // required
+      dbType: 'cf', // can be either 'rtdb' or 'cf' for Realtime DB or Cloud Firestore
+      locale: 'en-US', // optional, default shown
+      precache: true // optional, default shown. Currently it only precaches "schemas" for better performance
+    })
+    console.log("Hi")
+    console.log(this.flamelink)
 
     /* Helper */
 

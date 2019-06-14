@@ -4,7 +4,6 @@ import { compose } from 'recompose';
 import {
   AuthUserContext,
   withAuthorization,
-  withEmailVerification,
 } from '../Session';
 import { withFirebase } from '../Firebase';
 import { PasswordForgetForm } from '../PasswordForget';
@@ -218,6 +217,5 @@ const LoginManagement = withFirebase(LoginManagementBase);
 const condition = authUser => !!authUser;
 
 export default compose(
-  withEmailVerification,
   withAuthorization(condition),
 )(AccountPage);
