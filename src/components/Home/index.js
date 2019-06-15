@@ -1,48 +1,48 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { compose } from 'recompose';
 
 import { withAuthorization } from '../Session';
 import Messages from '../Messages';
+import { withFirebase } from '../Firebase';
 
-const HomePage = () => (
-  <div style={styles.container}>
-    <h1 >Home Page</h1>
-    <p style={styles.description}>The Home Page is accessible by every signed in user.</p>
+const INITIAL_STATE = {
+  titles: {},
+};
 
-    <Messages />
-  </div>
-);
+class HomePageBase extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { ...INITIAL_STATE };
+
+    this.props.firebase.titles().then((obj) => {
+      this.setState({"titles": obj[Object.keys(obj)[0]]});
+    });
+  }
+
+ 
+
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  render() {
+    return(
+    <div >
+    <h1>this.state.titles.reviews</h1>
+      <Messages />
+    </div>
+  )
+  }
+}
+
 
 const condition = authUser => !!authUser;
 
-export default compose(
+const HomePage
+ = compose(
+  withFirebase,
   withAuthorization(condition),
-)(HomePage);
+)(HomePageBase);
 
-const styles = {
-  container: {
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  logo: {
-    alignSelf: 'center',
-    flex: 1,
-    height: '45%',
-    resizeMode: 'contain',
-    width: '45%',
-  },
-  form: {
-    flex: 1,
-    justifyContent: 'center',
-    width: '80%',
-  },
-  description: {
-    color: '#656500',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-}
+export default HomePage;

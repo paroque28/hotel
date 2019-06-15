@@ -9,6 +9,9 @@ import { withFirebase } from '../Firebase';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+
 const SIGN_IN_METHODS = [
   {
     id: 'password',
@@ -132,20 +135,20 @@ const SocialLoginToggle = ({
   onUnlink,
 }) =>
   isEnabled ? (
-    <button
+    <Button
       type="button"
       onClick={() => onUnlink(signInMethod.id)}
       disabled={onlyOneLeft}
     >
       Deactivate {signInMethod.id}
-    </button>
+    </Button>
   ) : (
-    <button
+    <Button
       type="button"
       onClick={() => onLink(signInMethod.provider)}
     >
       Link {signInMethod.id}
-    </button>
+    </Button>
   );
 
 class DefaultLoginToggle extends Component {
@@ -180,15 +183,15 @@ class DefaultLoginToggle extends Component {
       passwordOne !== passwordTwo || passwordOne === '';
 
     return isEnabled ? (
-      <button
+      <Button
         type="button"
         onClick={() => onUnlink(signInMethod.id)}
         disabled={onlyOneLeft}
       >
         Deactivate {signInMethod.id}
-      </button>
+      </Button>
     ) : (
-      <form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.onSubmit}>
         <input
           name="passwordOne"
           value={passwordOne}
@@ -204,10 +207,10 @@ class DefaultLoginToggle extends Component {
           placeholder="Confirm New Password"
         />
 
-        <button disabled={isInvalid} type="submit">
+        <Button disabled={isInvalid} type="submit">
           Link {signInMethod.id}
-        </button>
-      </form>
+        </Button>
+      </Form>
     );
   }
 }
