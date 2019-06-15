@@ -17,7 +17,7 @@ class UserList extends Component {
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.props.firebase.users().on('value', snapshot => {
+    this.props.firebase.users().on('value', (snapshot) => {
       const usersObject = snapshot.val();
 
       const usersList = Object.keys(usersObject).map(key => ({
@@ -47,13 +47,19 @@ class UserList extends Component {
           {users.map(user => (
             <li key={user.uid}>
               <span>
-                <strong>ID:</strong> {user.uid}
+                <strong>ID:</strong>
+                {' '}
+                {user.uid}
               </span>
               <span>
-                <strong>E-Mail:</strong> {user.email}
+                <strong>E-Mail:</strong>
+                {' '}
+                {user.email}
               </span>
               <span>
-                <strong>Username:</strong> {user.username}
+                <strong>Username:</strong>
+                {' '}
+                {user.username}
               </span>
               <span>
                 <Link

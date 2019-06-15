@@ -1,8 +1,8 @@
 import React from 'react';
 
+import Button from 'react-bootstrap/Button';
 import { withFirebase } from '../Firebase';
 
-import Button from 'react-bootstrap/Button'
 
 const SignOutButton = ({ firebase }) => (
   <Button variant="outline-light" onClick={firebase.doSignOut}>
