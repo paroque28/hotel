@@ -37,7 +37,7 @@ class MessageItem extends Component {
 
     return (
       <li>
-        <hr/>
+        <br/>
         {editMode ? (
           <input
             type="text"

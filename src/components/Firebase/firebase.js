@@ -130,6 +130,10 @@ class Firebase {
   // *** Images API ***
 
   getURL = (id) => this.flamelink.storage.getURL(id)
+
+  // *** Language API ***
+
+  setLocale = (locale) => this.flamelink.settings.setLocale(locale)
 }
 
 export default Firebase;

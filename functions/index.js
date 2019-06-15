@@ -36,13 +36,14 @@ exports.reviewMood = functions.storage.object().onFinalize(async (object) => {
   console.log('Face detection on image', faces);
 
   var message = "No expression detected!"
-  if(faces.joyLikelihood === 'VERY_LIKELY') message = "New Review: Joy :) 5 stars"
-  else  if(faces.sorrowLikelihood === 'VERY_LIKELY') message = "New Review: Sorrow :/ 2 stars"
-  else  if(faces.angerLikelihood === 'VERY_LIKELY') message = "New Review: Anger Dx 1 star"
-  else  if(faces. surpriseLikelihood === 'VERY_LIKELY') message = "New Review: Surprise : 4 stars"
+  console.log(`Joy: ${faces[0].joyLikelihood}`);
+  if(faces[0].joyLikelihood === 'VERY_LIKELY') message = "New Review: Joy :) 5 stars"
+  else  if(faces[0].sorrowLikelihood === 'VERY_LIKELY') message = "New Review: Sorrow :/ 2 stars"
+  else  if(faces[0].angerLikelihood === 'VERY_LIKELY') message = "New Review: Anger Dx 1 star"
+  else  if(faces[0]. surpriseLikelihood === 'VERY_LIKELY') message = "New Review: Surprise : 4 stars"
 
 
-  admin.database().ref('messages').firebase.messages().push({
+  admin.database().ref('messages').push({
     text: message,
     userId: "AI",
     createdAt: admin.database.ServerValue.TIMESTAMP,
