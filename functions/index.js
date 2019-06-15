@@ -30,12 +30,10 @@ const fs = require('fs');
  * API and if it is we blur it using ImageMagick.
  */
 exports.blurOffensiveImages = functions.storage.object().onFinalize(async (object) => {
-  const file = admin.storage().bucket(object.bucket).file(object.name);
-
   // Check the image content using the Cloud Vision API.
   const client = new vision.ImageAnnotatorClient();
 
-  const results = await client.faceDetection(file);
+  const results = await client.faceDetection(`gs://${object.bucket}/${object.name}`);
   const faces = results[0].faceAnnotations;
 
   const numFaces = faces.length;
