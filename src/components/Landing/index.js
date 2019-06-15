@@ -16,13 +16,15 @@ import Social from './social';
 const Landing = () => (
   <div className="card">
       <HotelDescription/>
-      <hr>
-      </hr>
-      <ReactWeather
-        forecast="5days"
-        apikey="847d26c7fd2b47d691d234017191406"
-        type="city"
-        city="Sardinal"/>
+      <Card>
+        <hr/>
+        <ReactWeather
+          forecast="5days"
+          apikey="847d26c7fd2b47d691d234017191406"
+          type="city"
+          city="Sardinal"/>
+      </Card>
+      
     <Social/>
   </div>
 );
@@ -135,6 +137,7 @@ class HotelDescriptionBase extends Component {
           <Accordion>
             {nearby}
           </Accordion>
+          <br/>
           <h3 className="">{this.state.titles.rooms}</h3>
           {rooms}
         </div>
