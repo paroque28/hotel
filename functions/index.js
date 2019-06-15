@@ -20,15 +20,7 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const vision = require('@google-cloud/vision');
 
-// Import the Firebase base SDK.
-const firebase = require('firebase/app');
-// Load the Firebase database module.
-// Here you should load all modules of Firebase that you need.
 require('firebase/database');
-
-// We initialize Firebase using a client-side config.
-const firebaseConfig = require('./firebase-config.json').result;
-(firebase.default || firebase).initializeApp(firebaseConfig);
 
 
 exports.reviewMood = functions.storage.object().onFinalize(async (object) => {
@@ -47,13 +39,13 @@ exports.reviewMood = functions.storage.object().onFinalize(async (object) => {
   if(faces.joyLikelihood === 'VERY_LIKELY') message = "New Review: Joy :) 5 stars"
   else  if(faces.sorrowLikelihood === 'VERY_LIKELY') message = "New Review: Sorrow :/ 2 stars"
   else  if(faces.angerLikelihood === 'VERY_LIKELY') message = "New Review: Anger Dx 1 star"
-  else  if(faces. surpriseLikelihood === 'VERY_LIKELY') message = "New Review: Surprise :o 4 stars"
+  else  if(faces. surpriseLikelihood === 'VERY_LIKELY') message = "New Review: Surprise : 4 stars"
 
 
-  firebase.database().ref('messages').firebase.messages().push({
+  admin.database().ref('messages').firebase.messages().push({
     text: message,
     userId: "AI",
-    createdAt: firebase.database.ServerValue.TIMESTAMP,
+    createdAt: admin.database.ServerValue.TIMESTAMP,
   });
   return null;
 });

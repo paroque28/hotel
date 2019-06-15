@@ -37,6 +37,7 @@ class Firebase {
 
     this.auth = app.auth();
     this.db = app.database();
+    this.storage = app.storage();
 
     /* Social Sign In Method Provider */
 
@@ -108,6 +109,8 @@ class Firebase {
 
   messages = () => this.db.ref('messages');
 
+  // *** Photos API ***
+  photos = () => this.storage.ref("images");
 
   // *** Rooms API ***
   rooms = () => this.flamelink.content.get({ schemaKey: 'room' });

@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 import { withAuthorization } from '../Session';
 import Messages from '../Messages';
 import { withFirebase } from '../Firebase';
+import FaceReviewer from '../FaceReviewer';
 
 const INITIAL_STATE = {
   titles: {},
@@ -31,6 +32,7 @@ class HomePageBase extends Component {
     <div >
     <h1>{this.state.titles.reviews}</h1>
       <Messages />
+      <FaceReviewer/>
     </div>
   )
   }
