@@ -118,6 +118,9 @@ class Firebase {
   // *** Services API ***
   services = () => this.flamelink.content.get({ schemaKey: 'service' });
 
+  // *** Nearby API ***
+  nearby = () => this.flamelink.content.get({ schemaKey: 'nearby' });
+
   // *** Hotel API ***
 
   hotel = () => this.flamelink.content.get({ schemaKey: 'hotel', populate: [{

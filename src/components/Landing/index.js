@@ -16,7 +16,6 @@ import 'react-open-weather/lib/css/ReactWeather.css';
 const Landing = () => (
   <div className="card">
       <HotelDescription/>
-      <HotelCarousel/>
       <hr>
       </hr>
       <ReactWeather
@@ -38,6 +37,7 @@ const INITIAL_STATE = {
   titles: {},
   hotel: {},
   services: {},
+  nearby: {},
   hotelImages: [],
   rooms: {}
 };
@@ -52,10 +52,14 @@ class HotelDescriptionBase extends Component {
     });
     this.props.firebase.rooms().then((obj) => {
       this.setState({"rooms": obj});
+      console.log(obj)
     });
     this.props.firebase.services().then((obj) => {
       this.setState({"services": obj});
       console.log(obj)
+    });
+    this.props.firebase.nearby().then((obj) => {
+      this.setState({"nearby": obj});
     });
     this.props.firebase.titles().then((obj) => {
       this.setState({"titles": obj[Object.keys(obj)[0]]});
@@ -89,16 +93,56 @@ class HotelDescriptionBase extends Component {
             </Card>
       );
     });
+    const nearbyList = this.state.nearby;
+    const nearby = Object.keys(this.state.nearby).map(function(key) {
+      return(<Card>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                 {nearbyList[key].name}
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey="0">
+                <Card.Body>{nearbyList[key].description}
+                <p>
+                {nearbyList[key].phoneNumber}
+                </p>
+                </Card.Body>
+                
+              </Accordion.Collapse>
+            
+            </Card>
+      );
+    });
+    const roomsList = this.state.rooms;
+    const rooms = Object.keys(this.state.rooms).map(function(key) {
+      return(<div>
+              <h5>{roomsList[key].name}</h5>
+              <br></br>
+              <p>Capacity: {roomsList[key].capacity}</p>
+              <p>Beds: {roomsList[key].beds}</p>
+              <p>Price: {roomsList[key].price}</p>
+            </div>
+      );
+    });
     return (
       <div className="container">
         <h1 className="display-4 ">{this.state.hotel.name}</h1>
         <p className="lead">{this.state.hotel.description}</p>
+        <br/>
+        <HotelCarousel/>
+        <br/>
         <div className="container">
           
           <h4 className="">{this.state.titles.services}</h4>
           <Accordion>
             {services}
           </Accordion>
+          <h4 className="">{this.state.titles.nearby}</h4>
+          <Accordion>
+            {nearby}
+          </Accordion>
+          <h3 className="">{this.state.titles.rooms}</h3>
+          {rooms}
         </div>
       </div>
         );
