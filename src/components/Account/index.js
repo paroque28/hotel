@@ -28,8 +28,11 @@ const AccountPage = () => (
     {authUser => (
       <div>
         <h1>Account: {authUser.email}</h1>
+        <br></br>
         <PasswordForgetForm />
+        <br></br>
         <PasswordChangeForm />
+        <br></br>
         <LoginManagement authUser={authUser} />
       </div>
     )}

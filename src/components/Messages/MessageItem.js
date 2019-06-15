@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import Toast from 'react-bootstrap/Toast'
+
+import Button from 'react-bootstrap/Button'
+
 class MessageItem extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +37,7 @@ class MessageItem extends Component {
 
     return (
       <li>
+        <hr/>
         {editMode ? (
           <input
             type="text"
@@ -40,31 +45,27 @@ class MessageItem extends Component {
             onChange={this.onChangeEditText}
           />
         ) : (
-          <span>
-            <strong>{message.userId}</strong> {message.text}
-            {message.editedAt && <span>(Edited)</span>}
-          </span>
+           <Toast onClose={() => {if(authUser.uid === message.userId)onRemoveMessage(message.uid)}}>
+            <Toast.Header>
+              <strong className="mr-auto">{message.userId}</strong>
+              <small> {message.editedAt && <span>(Edited)</span>}</small>
+            </Toast.Header>
+            <Toast.Body>{message.text}</Toast.Body>
+          </Toast>
+
         )}
 
         {authUser.uid === message.userId && (
           <span>
             {editMode ? (
               <span>
-                <button onClick={this.onSaveEditText}>Save</button>
-                <button onClick={this.onToggleEditMode}>Reset</button>
+                <Button onClick={this.onSaveEditText}>Save</Button>
+                <Button onClick={this.onToggleEditMode}>Reset</Button>
               </span>
             ) : (
-              <button onClick={this.onToggleEditMode}>Edit</button>
+              <Button onClick={this.onToggleEditMode}>Edit</Button>
             )}
 
-            {!editMode && (
-              <button
-                type="button"
-                onClick={() => onRemoveMessage(message.uid)}
-              >
-                Delete
-              </button>
-            )}
           </span>
         )}
       </li>

@@ -29,7 +29,7 @@ class HomePageBase extends Component {
   render() {
     return(
     <div >
-    <h1>this.state.titles.reviews</h1>
+    <h1>{this.state.titles.reviews}</h1>
       <Messages />
     </div>
   )

@@ -4,6 +4,8 @@ import { AuthUserContext } from '../Session';
 import { withFirebase } from '../Firebase';
 import MessageList from './MessageList';
 
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 class Messages extends Component {
   constructor(props) {
     super(props);
@@ -17,10 +19,10 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    this.onListenForMessages();
+    this.onListenFormessages();
   }
 
-  onListenForMessages = () => {
+  onListenFormessages = () => {
     this.setState({ loading: true });
 
     this.props.firebase
@@ -83,7 +85,7 @@ class Messages extends Component {
   onNextPage = () => {
     this.setState(
       state => ({ limit: state.limit + 5 }),
-      this.onListenForMessages,
+      this.onListenFormessages,
     );
   };
 
@@ -95,9 +97,9 @@ class Messages extends Component {
         {authUser => (
           <div>
             {!loading && messages && (
-              <button type="button" onClick={this.onNextPage}>
+              <Button type="Button" onClick={this.onNextPage}>
                 More
-              </button>
+              </Button>
             )}
 
             {loading && <div>Loading ...</div>}
@@ -113,7 +115,7 @@ class Messages extends Component {
 
             {!messages && <div>There are no messages ...</div>}
 
-            <form
+            <Form
               onSubmit={event =>
                 this.onCreateMessage(event, authUser)
               }
@@ -123,8 +125,8 @@ class Messages extends Component {
                 value={text}
                 onChange={this.onChangeText}
               />
-              <button type="submit">Send</button>
-            </form>
+              <Button type="submit">Send</Button>
+            </Form>
           </div>
         )}
       </AuthUserContext.Consumer>
