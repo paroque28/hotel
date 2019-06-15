@@ -8,10 +8,10 @@ import Carousel from 'react-bootstrap/Carousel'
 import Card from 'react-bootstrap/Card'
 import Accordion from 'react-bootstrap/Accordion'
 import Button from 'react-bootstrap/Button'
-import ButtonGroup from 'react-bootstrap/ButtonGroup'
 
 import ReactWeather from 'react-open-weather';
 import 'react-open-weather/lib/css/ReactWeather.css';
+import Social from './social';
 
 const Landing = () => (
   <div className="card">
@@ -23,13 +23,7 @@ const Landing = () => (
         apikey="847d26c7fd2b47d691d234017191406"
         type="city"
         city="Sardinal"/>
-
-<hr/>
-      <ButtonGroup aria-label="Basic example">
-        <Button href="http://www.google.com" variant="secondary">Twitter</Button>
-        <Button variant="secondary">Instagram</Button>
-        <Button variant="secondary">Facebook</Button>
-      </ButtonGroup>
+    <Social/>
   </div>
 );
 
